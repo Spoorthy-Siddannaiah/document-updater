@@ -1,0 +1,20 @@
+[
+  {
+    "query": "We are renaming the term 'handoff' to 'transfer' across the entire documentation. Update all relevant documents.",
+    "term": "handoff",
+    "scenario": "cross-cutting-rename",
+    "note": "Every chunk mentioning 'handoff' must be surfaced. Tests COMPLETENESS, not just top hit."
+  },
+  {
+    "query": "WebSearchTool is removed from the SDK. Update all documents that reference it.",
+    "term": "WebSearchTool",
+    "scenario": "cross-cutting-removal",
+    "note": "Only 2 chunks reference it; both must be found."
+  },
+  {
+    "query": "Agent.as_tool() is renamed to Agent.as_callable(). Update every place it appears.",
+    "term": "as_tool",
+    "scenario": "cross-cutting-rename",
+    "note": "Symbol rename; all occurrences must be covered."
+  }
+]

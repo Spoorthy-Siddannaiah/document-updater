@@ -1,0 +1,449 @@
+[
+  {
+    "query": "We are deprecating agents-as-tools. Agent.as_tool() is no longer supported; other agents must be invoked via handoff instead.",
+    "scenario": "deprecation",
+    "target_sections": [
+      "tools.md::543",
+      "tools.md::584"
+    ],
+    "must_mention": [
+      "handoff",
+      "no longer"
+    ],
+    "must_not_keep": [
+      "You can do this by modeling agents as tools"
+    ],
+    "must_not_edit": [
+      "guardrails.md",
+      "sessions/index.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "Deprecation. Section about agents-as-tools must point to handoffs and stop recommending as_tool.",
+    "type": "exact-symbol"
+  },
+  {
+    "query": "RunContextWrapper is renamed to ToolContext everywhere in the local context API. Update all references.",
+    "scenario": "rename-cross-cutting",
+    "target_sections": [
+      "context.md::8",
+      "context.md::32"
+    ],
+    "must_mention": [
+      "ToolContext"
+    ],
+    "must_not_keep": [
+      "RunContextWrapper"
+    ],
+    "must_not_edit": [
+      "sessions/index.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "Cross-cutting rename. RunContextWrapper appears in many files (context, agents, tools, usage, ...); all should switch to ToolContext. must_not_edit names a file that does NOT contain the term.",
+    "type": "cross-cutting"
+  },
+  {
+    "query": "WebSearchTool now requires a mandatory api_key argument when constructed.",
+    "scenario": "signature-change",
+    "target_sections": [
+      "tools.md::24"
+    ],
+    "must_mention": [
+      "api_key"
+    ],
+    "must_not_keep": [],
+    "must_not_edit": [
+      "guardrails.md",
+      "context.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "New required parameter. Hosted-tools section documenting WebSearchTool should show api_key.",
+    "type": "exact-symbol"
+  },
+  {
+    "query": "Tool guardrails are removed. Guardrails can no longer wrap function tools; only agent input and output guardrails remain.",
+    "scenario": "removal",
+    "target_sections": [
+      "guardrails.md::54"
+    ],
+    "must_mention": [
+      "no longer",
+      "removed"
+    ],
+    "must_not_keep": [
+      "Tool guardrails wrap"
+    ],
+    "must_not_edit": [
+      "tools.md",
+      "mcp.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "Capability removed. Tool-guardrails section should say removed; input/output guardrail sections untouched.",
+    "type": "exact-symbol"
+  },
+  {
+    "query": "max_turns=None no longer disables the turn limit; an explicit positive integer is now required and passing None raises an error.",
+    "scenario": "behavior-change",
+    "target_sections": [
+      "running_agents.md::26"
+    ],
+    "must_mention": [
+      "max_turns"
+    ],
+    "must_not_keep": [
+      "Pass `max_turns=None` to disable this turn limit"
+    ],
+    "must_not_edit": [
+      "tools.md",
+      "guardrails.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "Anchored in real text: running_agents.md says 'Pass max_turns=None to disable this turn limit'. That sentence must change.",
+    "type": "exact-symbol"
+  },
+  {
+    "query": "We removed the ability for one agent to call another agent as a tool. Agents can now only pass work to each other through handoffs. Update all relevant documents.",
+    "scenario": "natural-removal-prose+code",
+    "type": "natural-paraphrase",
+    "target_sections": [
+      "tools.md::543",
+      "tools.md::584"
+    ],
+    "must_mention": [
+      "handoff"
+    ],
+    "must_not_keep": [
+      "spanish_agent.as_tool("
+    ],
+    "must_not_edit": [
+      "sessions/index.md",
+      "guardrails.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "NATURAL phrasing, no 'as_tool' symbol named. Must update BOTH prose AND the as_tool() code examples. Mirrors the archive->delete reference case. KNOWN-HARD: retrieval can drop tools.md::543 when the symbol isn't named."
+  },
+  {
+    "query": "Agents can no longer search the web. Remove that capability from the docs and the examples.",
+    "scenario": "natural-removal-prose+code",
+    "type": "natural-paraphrase",
+    "target_sections": [
+      "tools.md::24"
+    ],
+    "must_mention": [
+      "no longer"
+    ],
+    "must_not_keep": [
+      "lets an agent search the web"
+    ],
+    "must_not_edit": [
+      "sessions/index.md",
+      "handoffs.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "NATURAL phrasing, no 'WebSearchTool' symbol. Must find the hosted-tools prose + WebSearchTool() code without the user naming it."
+  },
+  {
+    "query": "We now support Anthropic Claude models as a first-class provider alongside OpenAI.",
+    "scenario": "new-feature",
+    "target_sections": [
+      "models/index.md::246"
+    ],
+    "must_mention": [
+      "Claude"
+    ],
+    "must_not_keep": [],
+    "must_not_edit": [
+      "guardrails.md",
+      "sessions/index.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "New feature; may add content. Models doc should mention Claude/Anthropic support. Target section is a hint, not strict.",
+    "type": "no-op-vague"
+  },
+  {
+    "query": "Sessions no longer maintain conversation history automatically; callers must explicitly enable history persistence per run.",
+    "scenario": "default-change",
+    "target_sections": [
+      "sessions/index.md::1"
+    ],
+    "must_mention": [
+      "explicit"
+    ],
+    "must_not_keep": [
+      "automatically maintain conversation history"
+    ],
+    "must_not_edit": [
+      "tools.md",
+      "guardrails.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "Anchored to real text: sessions/index.md::1 says 'automatically maintain conversation history'. Reframed from the unanchored 'encryption key' premise (docs don't mention encryption-by-default).",
+    "type": "exact-symbol"
+  },
+  {
+    "query": "The temperature parameter is removed from ModelSettings; sampling is now controlled only via top_p.",
+    "scenario": "param-removal",
+    "target_sections": [
+      "models/index.md::246"
+    ],
+    "must_mention": [
+      "top_p"
+    ],
+    "must_not_keep": [
+      "temperature=0.1"
+    ],
+    "must_not_edit": [
+      "guardrails.md",
+      "handoffs.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "Anchored in real text: models/index.md documents temperature and shows ModelSettings(temperature=0.1). Corpus has no numeric constraints, so constraint-change isn't testable here; reframed as param-removal.",
+    "type": "number-value"
+  },
+  {
+    "query": "We are renaming the term 'handoff' to 'transfer' across the entire documentation.",
+    "scenario": "terminology-rename-multifile",
+    "target_sections": [
+      "handoffs.md::7",
+      "agents.md::208"
+    ],
+    "must_mention": [
+      "transfer"
+    ],
+    "must_not_keep": [],
+    "must_not_edit": [
+      "sessions/index.md"
+    ],
+    "expected_min_edits": 2,
+    "note": "Broad terminology rename touching many files. Tests cross-file coverage (recall across docs).",
+    "type": "cross-cutting"
+  },
+  {
+    "query": "The Codex tool subprocess stream limit default changed from 8388608 bytes to 4194304 bytes; update the runtime configuration docs.",
+    "scenario": "hard-split",
+    "target_sections": [
+      "tools.md::769.0"
+    ],
+    "must_mention": [
+      "4194304"
+    ],
+    "must_not_keep": [
+      "default is `8388608`"
+    ],
+    "must_not_edit": [
+      "sessions/index.md",
+      "guardrails.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "Targets a hard-split chunk in the Codex tool section.",
+    "type": "exact-symbol"
+  },
+  {
+    "query": "Codex tool runs now keep less terminal output by default: 4 MiB instead of 8 MiB. Update the docs so users know the new captured output limit.",
+    "scenario": "hard-split-paraphrase",
+    "target_sections": [
+      "tools.md::769.0"
+    ],
+    "must_mention": [
+      "4 MiB"
+    ],
+    "must_not_keep": [
+      "default is `8388608`"
+    ],
+    "must_not_edit": [
+      "sessions/index.md",
+      "guardrails.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "Same target as the exact stream-limit case, but phrased like a normal product change rather than using the exact config key or raw byte values.",
+    "type": "natural-paraphrase"
+  },
+  {
+    "query": "Tool-agents can no longer reuse a live sandbox from the parent run; they must always get their own sandbox RunConfig.",
+    "scenario": "hard-split",
+    "target_sections": [
+      "sandbox/guide.md::691.0"
+    ],
+    "must_mention": [
+      "own sandbox",
+      "RunConfig"
+    ],
+    "must_not_keep": [
+      "reuse a live sandbox"
+    ],
+    "must_not_edit": [
+      "tools.md",
+      "sessions/index.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "Targets the hard-split sandbox 'Expose as tools' section.",
+    "type": "exact-symbol"
+  },
+  {
+    "query": "Tool guardrail callbacks must now be async functions; update the ToolGuardrailFunctionOutput examples.",
+    "scenario": "hard-split",
+    "target_sections": [
+      "guardrails.md::68.0"
+    ],
+    "must_mention": [
+      "async",
+      "ToolGuardrailFunctionOutput"
+    ],
+    "must_not_keep": [
+      "def block_secrets"
+    ],
+    "must_not_edit": [
+      "tools.md",
+      "sessions/index.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "Targets a hard-split guardrails implementation section.",
+    "type": "exact-symbol"
+  },
+  {
+    "query": "VercelSandboxClient now supports S3Mount and R2Mount through VercelBlobMountStrategy; update the hosted sandbox platform tables.",
+    "scenario": "hard-split",
+    "target_sections": [
+      "sandbox/clients.md::81.0",
+      "sandbox/clients.md::81.1"
+    ],
+    "must_mention": [
+      "VercelBlobMountStrategy"
+    ],
+    "must_not_keep": [
+      "`VercelSandboxClient` | No hosted-specific mount strategy is currently exposed"
+    ],
+    "must_not_edit": [
+      "tools.md",
+      "guardrails.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "Targets a hard-split hosted sandbox clients table.",
+    "type": "exact-symbol"
+  },
+  {
+    "query": "The examples/tools/codex.py sample was renamed to examples/tools/codex_tool.py; update the examples catalog.",
+    "scenario": "hard-split",
+    "target_sections": [
+      "examples.md::5.1",
+      "examples.md::5.2"
+    ],
+    "must_mention": [
+      "examples/tools/codex_tool.py"
+    ],
+    "must_not_keep": [
+      "examples/tools/codex.py"
+    ],
+    "must_not_edit": [
+      "sessions/index.md",
+      "guardrails.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "Targets the large examples catalog section split into multiple chunks.",
+    "type": "exact-symbol"
+  },
+  {
+    "query": "Make handoffs more reliable.",
+    "scenario": "ambiguous-vague",
+    "target_sections": [],
+    "must_mention": [],
+    "must_not_keep": [],
+    "must_not_edit": [],
+    "expected_min_edits": 0,
+    "note": "Vague, non-actionable. Good behavior = few/no confident edits, or low-confidence only. Tests over-eager editing on unclear input. Not a hard no-op, but should not produce many high-confidence edits.",
+    "type": "no-op-vague"
+  },
+  {
+    "query": "Increase the default FileSearchTool max_num_results from 3 to 10 in the hosted tools example.",
+    "scenario": "number-change-in-code",
+    "target_sections": [
+      "tools.md::24"
+    ],
+    "must_mention": [
+      "10"
+    ],
+    "must_not_keep": [
+      "max_num_results=3"
+    ],
+    "must_not_edit": [
+      "guardrails.md",
+      "sessions/index.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "Number change INSIDE a code block. Embeddings struggle with bare numbers (ref: '250,000'); the edit must touch the code, not just prose.",
+    "type": "number-value"
+  },
+  {
+    "query": "Rename the function fetch_user_age to get_user_age in the context management examples.",
+    "scenario": "code-rename",
+    "target_sections": [
+      "context.md::32"
+    ],
+    "must_mention": [
+      "get_user_age"
+    ],
+    "must_not_keep": [
+      "fetch_user_age"
+    ],
+    "must_not_edit": [
+      "tools.md",
+      "guardrails.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "Rename lives in code (def + call sites), not prose. Tests editing inside ```python``` blocks.",
+    "type": "code-block"
+  },
+  {
+    "query": "We no longer support WebSearchTool. Remove it. We are not providing any replacement.",
+    "scenario": "removal-hallucination-guard",
+    "target_sections": [
+      "tools.md::24"
+    ],
+    "must_mention": [
+      "no longer",
+      "removed"
+    ],
+    "must_not_keep": [
+      "lets an agent search the web"
+    ],
+    "must_not_mention": [
+      "FileSearchTool instead",
+      "use FileSearchTool",
+      "replaced by"
+    ],
+    "must_not_edit": [
+      "guardrails.md",
+      "sessions/index.md"
+    ],
+    "expected_min_edits": 1,
+    "note": "Hallucination guard (ref: TrinoSQL\u2192DuneSQL). Removal with NO replacement named; the LLM must NOT invent a substitute tool it wasn't asked for.",
+    "type": "no-op-vague"
+  },
+  {
+    "query": "We redesigned our company logo and refreshed the marketing website homepage.",
+    "scenario": "no-op",
+    "target_sections": [],
+    "must_mention": [],
+    "must_not_keep": [],
+    "must_not_edit": [
+      "*"
+    ],
+    "expected_min_edits": 0,
+    "expected_max_edits": 0,
+    "note": "Unrelated to SDK docs. Correct output = zero edits. Tests false positives.",
+    "type": "no-op-vague"
+  },
+  {
+    "query": "Our office is relocating to a new address next quarter.",
+    "scenario": "no-op",
+    "target_sections": [],
+    "must_mention": [],
+    "must_not_keep": [],
+    "must_not_edit": [
+      "*"
+    ],
+    "expected_min_edits": 0,
+    "expected_max_edits": 0,
+    "note": "No-op. Should produce zero edits.",
+    "type": "no-op-vague"
+  }
+]

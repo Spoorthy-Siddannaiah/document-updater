@@ -1,0 +1,59 @@
+LLM-judge | model=gpt-4o | scoring 23 queries
+
+[exact-symbol      ] comp=1.00 faith=1.00  We are deprecating agents-as-tools. Agent.as_tool(
+     The edits comprehensively addressed the deprecation of `Agent.as_tool()` across all releva
+[cross-cutting     ] comp=1.00 faith=1.00  RunContextWrapper is renamed to ToolContext everyw
+     All references to RunContextWrapper were correctly updated to ToolContext across all relev
+[exact-symbol      ] comp=0.50 faith=1.00  WebSearchTool now requires a mandatory api_key arg
+     The edit correctly adds the api_key requirement to the WebSearchTool description, but it m
+[exact-symbol      ] comp=1.00 faith=1.00  Tool guardrails are removed. Guardrails can no lon
+     The edits accurately removed references to tool guardrails across relevant sections, align
+[exact-symbol      ] comp=1.00 faith=1.00  max_turns=None no longer disables the turn limit; 
+     All edits correctly address the change request by updating relevant sections to reflect th
+[natural-paraphrase] comp=1.00 faith=1.00  We removed the ability for one agent to call anoth
+     The edits correctly updated all relevant sections to reflect the removal of agent-as-tool 
+[natural-paraphrase] comp=1.00 faith=1.00  Agents can no longer search the web. Remove that c
+     The system correctly removed all references to web search from the documentation and examp
+[no-op-vague       ] comp=1.00 faith=1.00  We now support Anthropic Claude models as a first-
+     The edits accurately and comprehensively reflect the addition of Anthropic Claude models a
+[exact-symbol      ] comp=1.00 faith=1.00  Sessions no longer maintain conversation history a
+     All edits accurately reflect the change request and apply it consistently across relevant 
+[number-value      ] comp=1.00 faith=1.00  The temperature parameter is removed from ModelSet
+     The edits correctly removed references to the 'temperature' parameter from all relevant se
+[cross-cutting     ] comp=1.00 faith=1.00  We are renaming the term 'handoff' to 'transfer' a
+     The term 'handoff' was consistently and accurately replaced with 'transfer' across all rel
+[exact-symbol      ] comp=0.50 faith=0.00  The Codex tool subprocess stream limit default cha
+     The edit did not update the stream limit value in the runtime configuration docs and the c
+[natural-paraphrase] comp=0.50 faith=0.50  Codex tool runs now keep less terminal output by d
+     The edit mentions the change but does not update the actual text to reflect the new 4 MiB 
+[exact-symbol      ] comp=1.00 faith=1.00  Tool-agents can no longer reuse a live sandbox fro
+     The edits comprehensively and accurately reflect the change request across relevant sectio
+[exact-symbol      ] comp=0.50 faith=1.00  Tool guardrail callbacks must now be async functio
+     The edit correctly updates one example to use async functions, but it is unclear if all re
+[exact-symbol      ] comp=0.50 faith=0.80  VercelSandboxClient now supports S3Mount and R2Mou
+     The edits partially updated the tables but missed adding VercelSandboxClient to the first 
+[exact-symbol      ] comp=1.00 faith=1.00  The examples/tools/codex.py sample was renamed to 
+     The edits correctly updated all references to the renamed file in the examples catalog as 
+[no-op-vague       ] comp=0.00 faith=0.00  Make handoffs more reliable.
+     The edits made were substantive and not justified by the vague request to make handoffs mo
+[number-value      ] comp=0.50 faith=0.00  Increase the default FileSearchTool max_num_result
+     The edit did not change the default max_num_results value and was unrelated to the request
+[code-block        ] comp=1.00 faith=1.00  Rename the function fetch_user_age to get_user_age
+     The system correctly made no substantive edits as the request was not applicable to the pr
+[no-op-vague       ] comp=1.00 faith=1.00  We no longer support WebSearchTool. Remove it. We 
+     The edits correctly removed all mentions of WebSearchTool from the relevant documentation 
+[no-op-vague       ] comp=1.00 faith=1.00  We redesigned our company logo and refreshed the m
+     The system correctly made no edits as the request was unrelated/vague.
+[no-op-vague       ] comp=1.00 faith=1.00  Our office is relocating to a new address next qua
+     The system correctly made no edits as the request was unrelated/vague.
+
+type                  n  Completeness  Faithfulness
+---------------------------------------------------
+exact-symbol         10          0.80          0.88
+cross-cutting         2          1.00          1.00
+natural-paraphrase    3          0.83          0.83
+no-op-vague           5          0.80          0.80
+number-value          2          0.75          0.50
+code-block            1          1.00          1.00
+---------------------------------------------------
+OVERALL              23          0.83          0.84

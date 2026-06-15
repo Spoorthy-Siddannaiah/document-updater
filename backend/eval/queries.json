@@ -1,0 +1,298 @@
+[
+  {
+    "query": "The default model is changing from gpt-4.1 to gpt-5.4-mini for agents that don't set a model explicitly",
+    "expected_files": [
+      "models/index.md"
+    ],
+    "expected_sections": [
+      "models/index.md::29",
+      "models/index.md::55"
+    ],
+    "source": "changelog 0.16.0",
+    "scenario": "default-change"
+  },
+  {
+    "query": "Runner.run now accepts max_turns=None to disable the turn limit entirely",
+    "expected_files": [
+      "running_agents.md"
+    ],
+    "expected_sections": [
+      "running_agents.md::26"
+    ],
+    "source": "changelog 0.16.0",
+    "scenario": "new-option"
+  },
+  {
+    "query": "Model refusals are now surfaced as ModelRefusalError instead of an empty final_output",
+    "expected_files": [
+      "running_agents.md"
+    ],
+    "expected_sections": [
+      "running_agents.md::438"
+    ],
+    "source": "changelog 0.15.0",
+    "scenario": "behavior-change"
+  },
+  {
+    "query": "The return type of Agent.as_tool() is narrowed from Tool to FunctionTool",
+    "expected_files": [
+      "tools.md"
+    ],
+    "expected_sections": [
+      "tools.md::543",
+      "tools.md::584"
+    ],
+    "source": "changelog 0.9.0",
+    "scenario": "signature-change"
+  },
+  {
+    "query": "Nested handoff history is now opt-in and disabled by default; set nest_handoff_history=True to keep old behavior",
+    "expected_files": [
+      "handoffs.md"
+    ],
+    "expected_sections": [
+      "handoffs.md::31",
+      "running_agents.md::138"
+    ],
+    "source": "changelog 0.7.0",
+    "scenario": "default-change"
+  },
+  {
+    "query": "Realtime support now uses the gpt-realtime model and its GA API interface",
+    "expected_files": [
+      "realtime/guide.md",
+      "realtime/quickstart.md"
+    ],
+    "source": "changelog 0.3.0",
+    "scenario": "rename"
+  },
+  {
+    "query": "MCPServer.list_tools() now takes two new params, run_context and agent; subclasses must add them",
+    "expected_files": [
+      "mcp.md"
+    ],
+    "expected_sections": [
+      "mcp.md::57",
+      "mcp.md::183"
+    ],
+    "source": "changelog 0.1.0",
+    "scenario": "signature-change"
+  },
+  {
+    "query": "Sandbox local source materialization now keeps LocalFile.src inside base_dir unless granted via SandboxPathGrant",
+    "expected_files": [
+      "sandbox/guide.md"
+    ],
+    "expected_sections": [
+      "sandbox/guide.md::480",
+      "sandbox/guide.md::264"
+    ],
+    "source": "changelog 0.17.0",
+    "scenario": "behavior-change"
+  },
+  {
+    "query": "Local MCP tool failures are now configurable and can return model-visible errors instead of failing the run; set failure_error_function=None for fail-fast",
+    "expected_files": [
+      "mcp.md"
+    ],
+    "expected_sections": [
+      "mcp.md::27"
+    ],
+    "source": "changelog 0.8.0",
+    "scenario": "behavior-change"
+  },
+  {
+    "query": "We don't support agents as_tool anymore, other agents should only be invoked via handoff",
+    "expected_files": [
+      "tools.md",
+      "handoffs.md"
+    ],
+    "expected_sections": [
+      "tools.md::543",
+      "handoffs.md::7"
+    ],
+    "source": "scenario",
+    "scenario": "deprecation"
+  },
+  {
+    "query": "Sessions now require an encryption key by default for stored conversation history",
+    "expected_files": [
+      "sessions/index.md",
+      "sessions/encrypted_session.md"
+    ],
+    "source": "scenario",
+    "scenario": "default-change"
+  },
+  {
+    "query": "RunContextWrapper is renamed to ToolContext across the local context API",
+    "expected_files": [
+      "context.md"
+    ],
+    "source": "scenario",
+    "scenario": "rename"
+  },
+  {
+    "query": "When a conversation is passed to a different assistant, the new one should start fresh without seeing the earlier messages",
+    "expected_files": [
+      "handoffs.md"
+    ],
+    "expected_sections": [
+      "handoffs.md::103"
+    ],
+    "source": "adversarial",
+    "scenario": "paraphrase"
+  },
+  {
+    "query": "Stop letting one assistant call another like a helper function; make it a full transfer instead",
+    "expected_files": [
+      "tools.md",
+      "handoffs.md"
+    ],
+    "expected_sections": [
+      "tools.md::543",
+      "handoffs.md::7"
+    ],
+    "source": "adversarial",
+    "scenario": "paraphrase"
+  },
+  {
+    "query": "The Codex tool subprocess stream limit default changed from 8388608 bytes to 4194304 bytes; update the runtime configuration docs",
+    "expected_files": [
+      "tools.md"
+    ],
+    "expected_sections": [
+      "tools.md::769.0"
+    ],
+    "source": "scenario",
+    "scenario": "hard-split"
+  },
+  {
+    "query": "Codex tool runs now keep less terminal output by default: 4 MiB instead of 8 MiB. Update the docs so users know the new captured output limit.",
+    "expected_files": [
+      "tools.md"
+    ],
+    "expected_sections": [
+      "tools.md::769.0"
+    ],
+    "source": "adversarial",
+    "scenario": "hard-split-paraphrase",
+    "note": "Same target as the exact stream-limit query, but phrased without the exact config variable or raw byte values."
+  },
+  {
+    "query": "Tool-agents can no longer reuse a live sandbox from the parent run; they must always get their own sandbox RunConfig",
+    "expected_files": [
+      "sandbox/guide.md"
+    ],
+    "expected_sections": [
+      "sandbox/guide.md::691.0"
+    ],
+    "source": "scenario",
+    "scenario": "hard-split"
+  },
+  {
+    "query": "Tool guardrail callbacks must now be async functions; update the ToolGuardrailFunctionOutput examples",
+    "expected_files": [
+      "guardrails.md"
+    ],
+    "expected_sections": [
+      "guardrails.md::68.0"
+    ],
+    "source": "scenario",
+    "scenario": "hard-split"
+  },
+  {
+    "query": "VercelSandboxClient now supports S3Mount and R2Mount through VercelBlobMountStrategy; update the hosted sandbox platform tables",
+    "expected_files": [
+      "sandbox/clients.md"
+    ],
+    "expected_sections": [
+      "sandbox/clients.md::81.0",
+      "sandbox/clients.md::81.1"
+    ],
+    "source": "scenario",
+    "scenario": "hard-split"
+  },
+  {
+    "query": "The examples/tools/codex.py sample was renamed to examples/tools/codex_tool.py; update the examples catalog",
+    "expected_files": [
+      "examples.md"
+    ],
+    "expected_sections": [
+      "examples.md::5.1",
+      "examples.md::5.2"
+    ],
+    "source": "scenario",
+    "scenario": "hard-split"
+  },
+  {
+    "query": "We redesigned our company logo and refreshed the marketing website homepage",
+    "expected_files": [],
+    "source": "scenario",
+    "scenario": "no-op",
+    "note": "Unrelated to the SDK docs. Correct retrieval/suggestion = nothing relevant. Used by suggestion-level eval (false-positive check), excluded from retrieval recall."
+  },
+  {
+    "query": "Our office is moving to a new address next quarter",
+    "expected_files": [],
+    "source": "scenario",
+    "scenario": "no-op",
+    "note": "No-op. Should produce zero edits."
+  },
+  {
+    "query": "The coding tool now keeps much less of its captured terminal output by default; update the runtime settings documentation.",
+    "expected_files": [
+      "tools.md"
+    ],
+    "expected_sections": [
+      "tools.md::769.0"
+    ],
+    "source": "scenario",
+    "scenario": "long-chunk-natural"
+  },
+  {
+    "query": "When one agent calls another as a helper, that helper should always run in its own fresh isolated environment instead of reusing the caller's.",
+    "expected_files": [
+      "sandbox/guide.md"
+    ],
+    "expected_sections": [
+      "sandbox/guide.md::691.0"
+    ],
+    "source": "scenario",
+    "scenario": "long-chunk-natural"
+  },
+  {
+    "query": "Our example that scans a tool's output for secrets needs to be rewritten so the check no longer blocks while it runs.",
+    "expected_files": [
+      "guardrails.md"
+    ],
+    "expected_sections": [
+      "guardrails.md::68.0"
+    ],
+    "source": "scenario",
+    "scenario": "long-chunk-natural"
+  },
+  {
+    "query": "The hosted Vercel environment can now mount external cloud storage buckets; refresh the table of what each hosted platform supports.",
+    "expected_files": [
+      "sandbox/clients.md"
+    ],
+    "expected_sections": [
+      "sandbox/clients.md::81.0",
+      "sandbox/clients.md::81.1"
+    ],
+    "source": "scenario",
+    "scenario": "long-chunk-natural"
+  },
+  {
+    "query": "We renamed the coding-tool sample script to a clearer name; update the examples list so it points to the new file.",
+    "expected_files": [
+      "examples.md"
+    ],
+    "expected_sections": [
+      "examples.md::5.1",
+      "examples.md::5.2"
+    ],
+    "source": "scenario",
+    "scenario": "long-chunk-natural"
+  }
+]

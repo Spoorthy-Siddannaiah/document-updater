@@ -1,0 +1,19 @@
+=== EVAL REPORT | 440 chunks | K=12 ===
+
+RETRIEVAL  (production pipeline: RRF + term-match)
+  queries:            20  (17 section-labelled)
+  File Hit@5:          0.950
+  Section Hit@5:       0.824
+  Section Recall:     0.824   <-- PRIMARY (found all places)
+  MRR@5:              0.569
+  Avg candidates:     24.4
+
+SUGGESTION  (live LLM, scored per query-type)
+  type                  n  Recall(file)  Recall(sec)   Assert   No-op
+  -------------------------------------------------------------------
+  exact-symbol         10          1.00         0.95     0.80       -
+  natural-paraphrase    3          0.67         0.67     0.33       -
+  number-value          2          1.00         1.00     1.00       -
+  cross-cutting         2          1.00         1.00     1.00       -
+  code-block            1          1.00         1.00     1.00       -
+  no-op-vague           5          1.00         0.50     0.50     2/5

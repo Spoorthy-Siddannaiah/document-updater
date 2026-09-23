@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Pluno Doc Updater",
+  title: "Doc Update Assistant",
   description: "Update documentation from natural-language change requests",
 };
 

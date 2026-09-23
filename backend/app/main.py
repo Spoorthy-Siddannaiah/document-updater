@@ -13,16 +13,21 @@ from pydantic import BaseModel
 
 from . import config
 from .models import (
+    AgenticSuggestionResponse,
     Confidence,
+    DiffLineResponse,
     EditSuggestion,
     QueryRequest,
     QueryResponse,
+    RetrievedChunkResponse,
     SessionState,
     Suggestion,
+    SuggestionGenerationRequest,
     SuggestionStatus,
 )
 from .retrieval import index
 from .store import store
+from .agentic_workflow import workflow
 from .suggest import generate_suggestions, regenerate_one
 
 config.LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -44,7 +49,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Pluno Doc Updater", lifespan=lifespan)
+app = FastAPI(title="Doc Update Assistant", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=config.CORS_ORIGINS,
@@ -75,6 +80,61 @@ def query(req: QueryRequest) -> QueryResponse:
         suggestions=suggestions,
         considered_chunks=considered,
         elapsed_ms=elapsed_ms,
+    )
+
+
+@app.post("/api/suggestions/generate", response_model=AgenticSuggestionResponse)
+def generate_agentic_suggestions(req: SuggestionGenerationRequest) -> AgenticSuggestionResponse:
+    t0 = time.perf_counter()
+    try:
+        state = workflow.run(
+            req.requested_change,
+            run_id=req.run_id,
+            document_id=req.document_id,
+            user_id=req.user_id,
+            tenant_id=req.tenant_id,
+        )
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+
+    suggestions = workflow.to_api_suggestions(state)
+    elapsed_ms = int((time.perf_counter() - t0) * 1000)
+    logger.info(
+        "POST /api/suggestions/generate total=%.1fms run_id=%s status=%s edits=%d",
+        elapsed_ms,
+        state["run_id"],
+        state["status"],
+        len(suggestions),
+    )
+    return AgenticSuggestionResponse(
+        run_id=state["run_id"],
+        trace_id=state.get("trace_id"),
+        document_id=state.get("document_id"),
+        requested_change=state["requested_change"],
+        suggestions=suggestions,
+        retrieved_chunks=[
+            RetrievedChunkResponse(
+                chunk_id=chunk.chunk_id,
+                file_path=chunk.file_path,
+                section=chunk.section,
+                text=chunk.text,
+                score=chunk.score,
+            )
+            for chunk in state["retrieved_chunks"]
+        ],
+        diffs={
+            suggestion_id: [DiffLineResponse(**line.model_dump()) for line in lines]
+            for suggestion_id, lines in state["diffs"].items()
+        },
+        retrieved_chunk_ids=[chunk.chunk_id for chunk in state["retrieved_chunks"]],
+        prompt_hash=state["prompt_hash"],
+        model=state["model"],
+        latency_ms=state["latency_ms"] or elapsed_ms,
+        token_usage=state["token_usage"],
+        validation_errors=state["validation_errors"],
+        node_names=state["node_names"],
+        status=state["status"],
+        persisted=state["persisted"],
     )
 
 

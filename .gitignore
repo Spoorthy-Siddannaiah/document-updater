@@ -2,17 +2,30 @@
 __pycache__/
 *.pyc
 .venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
 backend/.cache/
 backend/.env
 backend/.deps/
 backend/log/
 backend/result/
+backend/*.sqlite
+backend/*.db
 
 # node / next
 node_modules/
 .next/
+out/
+dist/
+coverage/
 *.tsbuildinfo
 frontend/.env*.local
+npm-debug.log*
 
 # os
 .DS_Store
+
+# local/editor
+.idea/
+.vscode/

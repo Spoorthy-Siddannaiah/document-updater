@@ -1,0 +1,27 @@
+Installed 20 packages in 76ms
+Batch-latency experiment | SUGGEST_BATCH=4 | model=gpt-4o
+
+======================================================================
+query: Tool guardrail callbacks must now be async functions; update
+candidates: 12 (2 long/>=4000-char) -> 3 batches
+
+  all_at_once:   12.3s   edits=1
+  sequential :   17.2s   edits=5
+  concurrent :   11.7s   edits=5
+
+======================================================================
+query: VercelSandboxClient now supports S3Mount and R2Mount through
+candidates: 12 (2 long/>=4000-char) -> 3 batches
+
+  all_at_once:    8.3s   edits=2
+  sequential :   17.6s   edits=4
+  concurrent :   13.3s   edits=3
+
+======================================================================
+query: We don't support agents as_tool anymore, other agents should
+candidates: 34 (3 long/>=4000-char) -> 9 batches
+
+  all_at_once:   27.8s   edits=22
+  sequential :   81.4s   edits=28
+  concurrent :   25.5s   edits=28
+

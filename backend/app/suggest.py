@@ -19,6 +19,7 @@ from concurrent.futures import ThreadPoolExecutor
 from openai import OpenAI
 
 from . import config
+from .agentic_workflow import workflow
 from .chunking import Chunk
 from .models import Confidence, Suggestion
 from .retrieval import index, reciprocal_rank_fusion
@@ -145,67 +146,18 @@ def regenerate_one(query: str, chunk: Chunk) -> dict | None:
 
 def generate_suggestions(query: str) -> tuple[list[Suggestion], int]:
     t_start = time.perf_counter()
-    scored = _candidate_chunks(query)
-    t_retrieval = time.perf_counter() - t_start
-    if not scored:
-        logger.info("suggest query=%r retrieval=%.0fms llm=0ms candidates=0 edits=0",
-                    query[:40], t_retrieval * 1000)
-        return [], 0
-
-    sim_by_id = {c.chunk_id: s for c, s in scored}
-
-    # Batch candidates through the model so EVERY affected section is reviewed.
-    # A single prompt with dozens of sections degrades quality and risks truncated
-    # JSON; batching keeps each call focused while preserving completeness.
-    # Batches run CONCURRENTLY — a cross-cutting change can produce several batches,
-    # and running them sequentially blew past the proxy timeout (~45s). A thread
-    # pool over the (I/O-bound) LLM calls cuts wall-time to roughly one batch.
-    t_llm0 = time.perf_counter()
-    batches = [scored[i : i + config.SUGGEST_BATCH] for i in range(0, len(scored), config.SUGGEST_BATCH)]
-    n_batches = len(batches)
-    edits: list[dict] = []
-    if n_batches == 1:
-        edits = _edits_for_batch(query, batches[0])
-    else:
-        with ThreadPoolExecutor(max_workers=min(n_batches, 10)) as pool:
-            for batch_edits in pool.map(lambda b: _edits_for_batch(query, b), batches):
-                edits.extend(batch_edits)
-    t_llm = time.perf_counter() - t_llm0
-
-    suggestions: list[Suggestion] = []
-    for edit in edits:
-        chunk = index.by_id.get(edit.get("chunk_id", ""))
-        if chunk is None:
-            logger.warning("Model referenced unknown chunk_id %r", edit.get("chunk_id"))
-            continue
-        suggested = (edit.get("suggested_text") or "").strip("\n")
-        if not suggested or suggested.strip() == chunk.text.strip():
-            continue  # no-op edit
-        try:
-            confidence = Confidence(edit.get("confidence", "medium"))
-        except ValueError:
-            confidence = Confidence.medium
-        suggestions.append(
-            Suggestion(
-                id=uuid.uuid4().hex,
-                chunk_id=chunk.chunk_id,
-                file=chunk.file,
-                breadcrumb=chunk.breadcrumb,
-                original_text=chunk.text,
-                suggested_text=suggested,
-                reason=edit.get("reason", ""),
-                confidence=confidence,
-                similarity=sim_by_id.get(chunk.chunk_id, 0.0),
-                start_line=chunk.start_line,
-                end_line=chunk.end_line,
-            )
-        )
-
+    state = workflow.run(query)
+    suggestions = workflow.to_api_suggestions(state)
     order = {Confidence.high: 0, Confidence.medium: 1, Confidence.low: 2}
     suggestions.sort(key=lambda s: (order[s.confidence], -s.similarity))
-
+    considered = len(state["retrieved_chunks"])
     logger.info(
-        "suggest query=%r retrieval=%.0fms llm=%.0fms candidates=%d batches=%d edits=%d",
-        query[:40], t_retrieval * 1000, t_llm * 1000, len(scored), n_batches, len(suggestions),
+        "suggest query=%r total=%.0fms candidates=%d edits=%d status=%s trace_id=%s",
+        query[:40],
+        (time.perf_counter() - t_start) * 1000,
+        considered,
+        len(suggestions),
+        state["status"],
+        state.get("trace_id"),
     )
-    return suggestions, len(scored)
+    return suggestions, considered

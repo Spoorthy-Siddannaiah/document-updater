@@ -143,7 +143,7 @@ export default function Home() {
 
   return (
     <main className="container">
-      <h1>Pluno Doc Updater</h1>
+      <h1>Doc Update Assistant</h1>
       <p className="subtitle">
         Describe a product change. The AI finds documentation sections that need
         updating and proposes edits for your review.

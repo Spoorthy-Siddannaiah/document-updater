@@ -8,7 +8,7 @@ in-memory overlay.
 Saving applies each approved suggestion by replacing the chunk's exact original
 text with the edited text inside a working copy of the file. Exact-text replace is
 order-independent, so multiple edits to one file don't fight over shifting line
-numbers. The original files on disk are never mutated, so the demo corpus stays
+numbers. The original files on disk are never mutated, so the sample corpus stays
 reproducible across queries.
 """
 

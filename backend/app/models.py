@@ -47,6 +47,47 @@ class QueryResponse(BaseModel):
     elapsed_ms: int = 0
 
 
+class SuggestionGenerationRequest(BaseModel):
+    requested_change: str = Field(min_length=1)
+    document_id: str | None = None
+    user_id: str | None = None
+    tenant_id: str | None = None
+    run_id: str | None = None
+
+
+class RetrievedChunkResponse(BaseModel):
+    chunk_id: str
+    file_path: str
+    section: str
+    text: str
+    score: float
+
+
+class DiffLineResponse(BaseModel):
+    op: str
+    original: str = ""
+    suggested: str = ""
+
+
+class AgenticSuggestionResponse(BaseModel):
+    run_id: str
+    trace_id: str | None = None
+    document_id: str | None = None
+    requested_change: str
+    suggestions: list[Suggestion]
+    retrieved_chunks: list[RetrievedChunkResponse]
+    diffs: dict[str, list[DiffLineResponse]]
+    retrieved_chunk_ids: list[str]
+    prompt_hash: str
+    model: str
+    latency_ms: int
+    token_usage: dict
+    validation_errors: list[str]
+    node_names: list[str]
+    status: str
+    persisted: bool
+
+
 class EditSuggestion(BaseModel):
     suggested_text: str
 

@@ -16,6 +16,17 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 EMBED_MODEL = os.getenv("EMBED_MODEL", "text-embedding-3-small")
 CHAT_MODEL = os.getenv("CHAT_MODEL", "gpt-4o")
 
+# PostgreSQL is the production source of truth for suggestion runs and evals.
+# Leave unset for the local in-memory path.
+DATABASE_URL = os.getenv("DATABASE_URL", "")
+
+# Langfuse is optional locally, but production runs should configure it so every
+# LangGraph node has a trace/span.
+LANGFUSE_PUBLIC_KEY = os.getenv("LANGFUSE_PUBLIC_KEY", "")
+LANGFUSE_SECRET_KEY = os.getenv("LANGFUSE_SECRET_KEY", "")
+LANGFUSE_HOST = os.getenv("LANGFUSE_HOST", "https://cloud.langfuse.com")
+LANGFUSE_ENABLED = os.getenv("LANGFUSE_ENABLED", "0") == "1"
+
 # How many candidate chunks retrieval feeds to the suggestion model.
 TOP_K = int(os.getenv("TOP_K", "12"))
 # Depth pulled from each retriever before RRF fusion.
